@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 10 Clientes | CService Dashboard</title>
+    <style>
+        :root {
+            --navy: #003366;
+            --cyan: #00AEEF;
+            --light-cyan: #66CCFF;
+            --green: #10b981;
+            --blue: #3b82f6;
+            --orange: #f59e0b;
+            --gray: #6b7280;
+            --bg: #f0f4f8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--cyan) 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Compacto */
+        header {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-container {
+            background: #ffffff; border: 2px solid #e2e8f0;
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .logo {
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        h1 {
+            color: var(--navy);
+            font-size: 1.6em;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: var(--cyan);
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        /* KPIs Compactos */
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .kpi {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--cyan);
+        }
+
+        .kpi.green { border-left-color: var(--green); }
+        .kpi.blue { border-left-color: var(--blue); }
+        .kpi.orange { border-left-color: var(--orange); }
+
+        .kpi-value {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: var(--navy);
+            line-height: 1;
+        }
+
+        .kpi-label {
+            font-size: 0.75em;
+            color: var(--gray);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-detail {
+            font-size: 0.7em;
+            color: var(--cyan);
+            margin-top: 3px;
+        }
+
+        /* Legenda Compacta */
+        .legend {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            align-items: center;
+            font-size: 0.85em;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* Filtros Compactos */
+        .filters {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .filter-group label {
+            font-size: 0.8em;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--cyan);
+        }
+
+        .btn-reset {
+            padding: 9px 18px;
+            background: var(--navy);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .btn-reset:hover {
+            background: var(--cyan);
+        }
+
+        /* Cards Clientes Compactos */
+        .clientes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 18px;
+        }
+
+        .cliente-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+
+        .cliente-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .cliente-header {
+            background: linear-gradient(135deg, var(--navy), var(--cyan));
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        .cliente-nome {
+            font-size: 1.15em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .cliente-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85em;
+        }
+
+        .cliente-meta span {
+            background: rgba(255,255,255,0.25);
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .media-badge {
+            background: rgba(255,255,255,0.3);
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+
+        .cliente-body {
+            padding: 15px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .status-box {
+            text-align: center;
+            padding: 10px 5px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 2px solid #e5e7eb;
+        }
+
+        .status-box.green { background: #ecfdf5; border-color: var(--green); }
+        .status-box.blue { background: #eff6ff; border-color: var(--blue); }
+        .status-box.orange { background: #fffbeb; border-color: var(--orange); }
+        .status-box.gray { background: #f3f4f6; border-color: #d1d5db; }
+
+        .status-value {
+            font-size: 1.6em;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .status-label {
+            font-size: 0.65em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 3px;
+            letter-spacing: 0.3px;
+        }
+
+        .categorias {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .cat-tag {
+            background: var(--light-cyan);
+            color: var(--navy);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .btn-toggle {
+            width: 100%;
+            padding: 10px;
+            background: var(--navy);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+
+        .btn-toggle:hover {
+            background: var(--cyan);
+        }
+
+        .emissoras-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+        }
+
+        .emissoras-details.show {
+            max-height: 1500px;
+        }
+
+        .emissora-item {
+            background: #f8fafc;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 3px solid #cbd5e1;
+            font-size: 0.85em;
+        }
+
+        .emissora-item.green { border-left-color: var(--green); background: #ecfdf5; }
+        .emissora-item.blue { border-left-color: var(--blue); background: #eff6ff; }
+        .emissora-item.orange { border-left-color: var(--orange); background: #fffbeb; }
+
+        .emissora-nome {
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+
+        .emissora-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.9em;
+            color: var(--gray);
+        }
+
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85em;
+            color: white;
+        }
+
+        .status-badge.green { background: var(--green); }
+        .status-badge.blue { background: var(--blue); }
+        .status-badge.orange { background: var(--orange); }
+        .status-badge.gray { background: var(--gray); }
+
+        @media (max-width: 768px) {
+            .clientes-grid {
+                grid-template-columns: 1fr;
+            }
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+            .status-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container"><img src="https://www.genspark.ai/api/files/s/jh0jPesM?token=Z0FBQUFBQnBaNk91STFMSlhwSHJNamNwcjlvaTZXeXVWM0NoMUdyZlp1bTZCQkRySzlydkdaVkNmdmw2S3BmSEFQREZyV1Fmc2xNMTVnTTZVSWk5RFVZa2lsUmNCbDlFYUlhMHF0VDJlME9QQnlVczltaXFtbDM0WW5tNUV3ZkRxLXQzYWdZdjZ3aVZDel9MeUctZS1sYmdZLW83ejg2M3Q0X3UyZHNxYUVxX08wLU0ycHh0MDFxaFF2YzM4R1VPcVN2SWJaOS1zUkxBU3A4TUVRUDRfbGp0NXJBQkY0eTUyaVotT2c3a1BLd0JadkR3TGNLZDdLZkU1VG5IZUdDVkI1LXVGNmNvNUg0UHV2ZlRvVjkwYnZhOE1rTHowd3BDZWc9PQ" alt="CService Logo" class="logo"></div>
+            <div>
+                <h1>10 Clientes | Cobertura e Oportunidades</h1>
+                <div class="subtitle">O objetivo deste dashboard é evidenciar os 10 clientes ativos com maior potencial de integração imediata ao monitoramento Tunad.</div>
+            </div>
+        </header>
+
+        <div class="kpis">
+            <div class="kpi">
+                <div class="kpi-value" id="kpi-clientes">10</div>
+                <div class="kpi-label">Clientes Top 10</div>
+                <div class="kpi-detail">190 emissoras monitoradas</div>
+            </div>
+            <div class="kpi green">
+                <div class="kpi-value" id="kpi-transcricao">4</div>
+                <div class="kpi-label">✅ NewsGen</div>
+                <div class="kpi-detail">Prontas para uso imediato</div>
+            </div>
+            <div class="kpi blue">
+                <div class="kpi-value" id="kpi-monitoramento">182</div>
+                <div class="kpi-label">👁️ Em Monitoramento</div>
+                <div class="kpi-detail">Acompanhamento ativo</div>
+            </div>
+            <div class="kpi orange">
+                <div class="kpi-value" id="kpi-possibilidade">1</div>
+                <div class="kpi-label">🎯 Possibilidade</div>
+                <div class="kpi-detail">Oportunidades futuras</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">62</div>
+                <div class="kpi-label">📡 Infraestrutura</div>
+                <div class="kpi-detail">Emissoras disponíveis</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value" id="kpi-noticias">883</div>
+                <div class="kpi-label">📰 Total Notícias</div>
+                <div class="kpi-detail">Volume monitorado</div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <strong style="color: var(--navy);">📌 Legenda:</strong>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: var(--green);"></div>
+                <span><strong>NewsGen:</strong> Emissoras já disponíveis</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: var(--blue);"></div>
+                <span><strong>Monitoramento:</strong> Em acompanhamento</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background: var(--orange);"></div>
+                <span><strong>Possibilidade:</strong> Oportunidades</span>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>🔍 Buscar Cliente</label>
+                    <input type="text" id="search" placeholder="Digite o nome...">
+                </div>
+                <div class="filter-group">
+                    <label>📂 Categoria</label>
+                    <select id="filter-cat"><option value="">Todas</option></select>
+                </div>
+                <div class="filter-group">
+                    <label>🎯 Status</label>
+                    <select id="filter-status">
+                        <option value="">Todos</option>
+                        <option value="NewsGen">NewsGen</option>
+                        <option value="Em monitoramento">Em Monitoramento</option>
+                        <option value="Possibilidade">Possibilidade</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button class="btn-reset" onclick="reset()">🔄 Limpar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="clientes-grid" id="grid"></div>
+    </div>
+
+    <script>
+        const data = {"clientes": [{"Cliente": "Samsung", "Total_Emissoras": 38, "Total_Noticias": 352, "Em_Transcricao": 0, "Em_Monitoramento": 37, "Possibilidade": 0, "Sem_Cobertura": 1, "TV": 8, "Radio": 30, "Categorias": ["TV", "Rádio"], "Emissoras": [{"Emissora": "Times Brasil CNBC  [SP]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 229, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Globo Rio de Janeiro (Globo - RJ)  [RJ]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 4, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (São Paulo)  [SP]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 10, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil  [SP]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 5, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "BandNews FM (São Paulo)  [SP]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Bandeirantes  [SP]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil Money  [SP]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 10, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan News TV  [SP]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Roquette Pinto  [RJ]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rede Amazônica - Globo (AM)  [AM]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan TV (São Paulo)  [SP]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan News TV  [SP]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "BM&C News  [SP]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Território Eldorado FM  [SP]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Santa Cruz 1090 AM  [SC]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Band News Brasília  [DF]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (São Paulo)  [SP]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 10, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Difusora (810 AM - Jundiaí)  []", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Record TV - Rio Preto  [SP]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN Vitória 92.5 FM  [ES]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Alvorada (100.1 FM - Parintins)  [AM]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 7, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Verdes Mares - Globo (Fortaleza)  [CE]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Norte Amazonas  [AM]", "Cliente": "Samsung", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Não", "Em monitoramento": "Não", "Cobertura Tunad": "Não", "Status_Match": null, "Info_Match": null, "Status_Final": "Sem cobertura"}, {"Emissora": "Rádio Integração 104.9 FM  [SP]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Ouro Verde 105.5 FM  [PR]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Tarumã Tavares 105.1 FM  []", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 9, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Povo 96.3 FM Jequié  [BA]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (Rio Grande do Norte)  [RN]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Clube Varginha 99.3 FM  []", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 6, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Difusora Maceió 93.3 FM  [AL]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Eldorado Criciúma 570 AM  [SC]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 4, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Mais 87.9 FM  [SP]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 6, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Encontro das Águas Manaus 97.7 FM  []", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Arari 90.3 FM Araripina  [PE]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 5, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Laser Catalão 87.9 FM  [GO]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Atividade Manaus 87.9 FM  [AM]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 6, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "012 News Litoral São Sebastião 98.5 FM  []", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN Ponta Grossa 1300 AM  [PR]", "Cliente": "Samsung", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}]}, {"Cliente": "Lojas Renner", "Total_Emissoras": 32, "Total_Noticias": 134, "Em_Transcricao": 1, "Em_Monitoramento": 29, "Possibilidade": 1, "Sem_Cobertura": 1, "TV": 10, "Radio": 22, "Categorias": ["TV", "Rádio"], "Emissoras": [{"Emissora": "Times Brasil CNBC  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 26, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Globo News  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (São Paulo)  [SP]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 8, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Bandeirantes  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil Money  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 43, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil Money  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan News TV  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Brasil TV", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": "NewsGen", "Info_Match": {"nome": "TV Brasil TV", "cidade": "Nacional", "tipo": "Newsgen-OnDemand", "nome_original": "TV Brasil TV"}, "Status_Final": "NewsGen"}, {"Emissora": "Jovem Pan TV (São Paulo)  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan News TV  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan (100.9 FM - São Paulo)  [SP]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "BM&C News  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 15, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Território Eldorado FM  [SP]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (São Paulo)  [SP]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Gaúcha 93.7 FM Porto Alegre  [RS]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Pampa   [RS]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN Maceió  [AL]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan (100.9 FM - São Paulo)  [SP]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Difusora (810 AM - Jundiaí)  []", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV TH+ SBT Vale (São José dos Campos)  []", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "RÁDIO NACIONAL DA AMAZÔNIA  [AM]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio CBN (95,3 FM - Brasília)  [DF]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "EPTV Sul de Minas  []", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Ouro Verde 105.5 FM  [PR]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (Rio Grande do Norte)  [RN]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Maranata Jaboatão dos Guararapes 103.9 FM  [PE]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Eldorado Criciúma 570 AM  [SC]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Tv União Fortaleza  [CE]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 3, "Possibilidade": "Não", "Em monitoramento": "Não", "Cobertura Tunad": "Não", "Status_Match": null, "Info_Match": null, "Status_Final": "Sem cobertura"}, {"Emissora": "Canal Rural  [SP]", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN Vale (São José dos Campos/SP)  [SP]", "Cliente": "Lojas Renner", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Inter TV Costa Branca (Mossoró)  []", "Cliente": "Lojas Renner", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Sim", "Em monitoramento": "Não", "Cobertura Tunad": "Não", "Status_Match": null, "Info_Match": null, "Status_Final": "Possibilidade"}]}, {"Cliente": "Stone Co.", "Total_Emissoras": 26, "Total_Noticias": 90, "Em_Transcricao": 1, "Em_Monitoramento": 25, "Possibilidade": 0, "Sem_Cobertura": 0, "TV": 4, "Radio": 22, "Categorias": ["TV", "Rádio"], "Emissoras": [{"Emissora": "Times Brasil CNBC  [SP]", "Cliente": "Stone Co.", "Categoria": "TV", "Total de notícias": 30, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Globo News  [SP]", "Cliente": "Stone Co.", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil  [SP]", "Cliente": "Stone Co.", "Categoria": "TV", "Total de notícias": 7, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "BandNews FM (São Paulo)  [SP]", "Cliente": "Stone Co.", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil Money  [SP]", "Cliente": "Stone Co.", "Categoria": "TV", "Total de notícias": 12, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan News TV  [SP]", "Cliente": "Stone Co.", "Categoria": "TV", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Record News | Nacional TV", "Cliente": "Stone Co.", "Categoria": "TV", "Total de notícias": 4, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": "NewsGen", "Info_Match": {"nome": "Record News | Nacional TV", "cidade": "Nacional", "tipo": "Newsgen-OnDemand", "nome_original": "Record News | Nacional TV"}, "Status_Final": "NewsGen"}, {"Emissora": "Rádio Roquette Pinto  [RJ]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Massa FM - Blumenau  [SC]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan TV (São Paulo)  [SP]", "Cliente": "Stone Co.", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan News TV  [SP]", "Cliente": "Stone Co.", "Categoria": "TV", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan (100.9 FM - São Paulo)  [SP]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "BM&C News  [SP]", "Cliente": "Stone Co.", "Categoria": "TV", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Itatiaia (Belo Horizonte - FM 95.7)  [MG]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Território Eldorado FM  [SP]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Guaíba 720 AM  [RS]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Transamérica (100.1 FM - São Paulo)  [SP]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (Belém)  [PA]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan (100.9 FM - São Paulo)  [SP]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Pampa 97.5 FM  [RS]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Difusora (96.9 FM - Manaus)  [AM]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Mirante News São Luís 104.1 FM  [MA]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (Rio Grande do Norte)  [RN]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Praia 106.1 FM  [SP]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Som Maior 100.7 FM  [SC]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Papacaça 102.9 FM  [PE]", "Cliente": "Stone Co.", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}]}, {"Cliente": "CMPC Celulose Riograndense", "Total_Emissoras": 17, "Total_Noticias": 74, "Em_Transcricao": 1, "Em_Monitoramento": 15, "Possibilidade": 0, "Sem_Cobertura": 1, "TV": 7, "Radio": 10, "Categorias": ["TV", "Rádio"], "Emissoras": [{"Emissora": "Times Brasil CNBC  [SP]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Globo Rio de Janeiro (Globo - RJ)  [RJ]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Globo News  [SP]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Bandeirantes (São Paulo)  [SP]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Bandeirantes (São Paulo)  [SP]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Assembleia - Alesp (São Paulo)  [SP]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Não", "Em monitoramento": "Não", "Cobertura Tunad": "Não", "Status_Match": null, "Info_Match": null, "Status_Final": "Sem cobertura"}, {"Emissora": "Rádio Guaíba 720 AM  [RS]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "Rádio", "Total de notícias": 13, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Guaíba 720 AM  [RS]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "RBS TV (Globo - Porto Alegre/RS)  [RS]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "RBS TV (Globo - Porto Alegre/RS)  [RS]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "TV", "Total de notícias": 6, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Gaúcha 93.7 FM Porto Alegre  [RS]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Gaúcha 93.7 FM Porto Alegre  [RS]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "Rádio", "Total de notícias": 15, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Gaúcha 93.7 FM Porto Alegre  [RS]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Pampa   [RS]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "TV", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Pampa   [RS]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "TV", "Total de notícias": 15, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "SBT - Porto Alegre TV", "Cliente": "CMPC Celulose Riograndense", "Categoria": "TV", "Total de notícias": 7, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": "NewsGen", "Info_Match": {"nome": "SBT - Porto Alegre TV", "cidade": "Porto Alegre - RS / BR", "tipo": "Newsgen-OnDemand", "nome_original": "SBT - Porto Alegre TV"}, "Status_Final": "NewsGen"}, {"Emissora": "Band - (Porto Alegre)  [RS]", "Cliente": "CMPC Celulose Riograndense", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}]}, {"Cliente": "Fundação Maria Cecilia Souto Vidigal", "Total_Emissoras": 27, "Total_Noticias": 52, "Em_Transcricao": 0, "Em_Monitoramento": 27, "Possibilidade": 0, "Sem_Cobertura": 0, "TV": 0, "Radio": 27, "Categorias": ["Rádio"], "Emissoras": [{"Emissora": "CBN (São Paulo)  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 9, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN Rio de Janeiro 92.5 FM  [RJ]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan (100.9 FM - São Paulo)  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "BandNews (89.5 FM - Belo Horizonte)  [MG]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 4, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Nacional 980 AM  [DF]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (São Paulo)  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 9, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio USP (93.7 FM - São Paulo)  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Cruzeiro FM (92.3 FM - Sorocaba)  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Nova Brasil São Paulo 89.7 FM  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan (100.9 FM - São Paulo)  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Cidade (730 AM - Jundiaí)  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Verdinha Fortaleza 92.5 FM  []", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Pampa 97.5 FM  [RS]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "RÁDIO NACIONAL DA AMAZÔNIA  [AM]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Metropolitana Guaratinguetá 99.1 FM  [MT]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Cultura Caruaru 1130 AM  [PE]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Ouro Verde 105.5 FM  [PR]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Tarumã Tavares 105.1 FM  []", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Trianon (São Paulo - 740 AM)  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Universitária 99.9 FM  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Inconfidência FM (100.9 FM - Belo Horizonte)  [MG]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (Curitiba)  [PR]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Paz Brasil Santa Helena de Goiás 87.9 FM  []", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN Vale (São José dos Campos/SP)  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio O Povo CBN  [CE]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Papacaça 102.9 FM  [PE]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Educadora Bragança 93.7 FM  [SP]", "Cliente": "Fundação Maria Cecilia Souto Vidigal", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}]}, {"Cliente": "Conta Simples", "Total_Emissoras": 5, "Total_Noticias": 49, "Em_Transcricao": 0, "Em_Monitoramento": 5, "Possibilidade": 0, "Sem_Cobertura": 0, "TV": 2, "Radio": 3, "Categorias": ["TV", "Rádio"], "Emissoras": [{"Emissora": "EPTV Central - Globo (São Carlos)  [SP]", "Cliente": "Conta Simples", "Categoria": "TV", "Total de notícias": 25, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "ESPN Brasil  [SP]", "Cliente": "Conta Simples", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rede Família  [SP]", "Cliente": "Conta Simples", "Categoria": "TV", "Total de notícias": 6, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan News Rio Claro  [SP]", "Cliente": "Conta Simples", "Categoria": "Rádio", "Total de notícias": 15, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "RBS TV (Globo - Porto Alegre/RS)  [RS]", "Cliente": "Conta Simples", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}]}, {"Cliente": "Mercado Bitcoin", "Total_Emissoras": 8, "Total_Noticias": 40, "Em_Transcricao": 0, "Em_Monitoramento": 8, "Possibilidade": 0, "Sem_Cobertura": 0, "TV": 0, "Radio": 8, "Categorias": ["TV", "Rádio"], "Emissoras": [{"Emissora": "Times Brasil CNBC  [SP]", "Cliente": "Mercado Bitcoin", "Categoria": "TV", "Total de notícias": 13, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil Money  [SP]", "Cliente": "Mercado Bitcoin", "Categoria": "TV", "Total de notícias": 9, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Bandeirantes (São Paulo)  [SP]", "Cliente": "Mercado Bitcoin", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Bandeirantes (São Paulo)  [SP]", "Cliente": "Mercado Bitcoin", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Menina Blumenau 97.5 FM  [SC]", "Cliente": "Mercado Bitcoin", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "BM&C News  [SP]", "Cliente": "Mercado Bitcoin", "Categoria": "TV", "Total de notícias": 11, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Pampa 97.5 FM  [RS]", "Cliente": "Mercado Bitcoin", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN Florianópolis 90,3 FM  [SC]", "Cliente": "Mercado Bitcoin", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}]}, {"Cliente": "Porto", "Total_Emissoras": 15, "Total_Noticias": 33, "Em_Transcricao": 1, "Em_Monitoramento": 14, "Possibilidade": 0, "Sem_Cobertura": 0, "TV": 4, "Radio": 11, "Categorias": ["TV", "Rádio"], "Emissoras": [{"Emissora": "Times Brasil CNBC  [SP]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Globo News  [SP]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 7, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Globo News  [SP]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Globo (São Paulo/SP)  [SP]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (São Paulo)  [SP]", "Cliente": "Porto", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil  [SP]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Bandeirantes  [SP]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil Money  [SP]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 7, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Cultura  [SP]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": "NewsGen", "Info_Match": {"nome": "Cultura TV", "cidade": "São Paulo - SP / BR", "tipo": "Newsgen-OnDemand", "nome_original": "Cultura TV"}, "Status_Final": "NewsGen"}, {"Emissora": "TV Gazeta (São Paulo)  [SP]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (São Paulo)  [SP]", "Cliente": "Porto", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Band Sports  [SP]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Alpha São Paulo 101,7 FM  [SP]", "Cliente": "Porto", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Tropical Natal  [RN]", "Cliente": "Porto", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CBN (Curitiba)  [PR]", "Cliente": "Porto", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}]}, {"Cliente": "Aviva", "Total_Emissoras": 12, "Total_Noticias": 31, "Em_Transcricao": 0, "Em_Monitoramento": 12, "Possibilidade": 0, "Sem_Cobertura": 0, "TV": 2, "Radio": 10, "Categorias": ["TV", "Rádio"], "Emissoras": [{"Emissora": "Times Brasil CNBC  [SP]", "Cliente": "Aviva", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "BandNews FM (São Paulo)  [SP]", "Cliente": "Aviva", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Band News Rio de Janeiro 90.3 FM  [RJ]", "Cliente": "Aviva", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "ESPN Brasil  [SP]", "Cliente": "Aviva", "Categoria": "TV", "Total de notícias": 7, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Band News Rio de Janeiro 90.3 FM  [RJ]", "Cliente": "Aviva", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Anhanguera (Globo Goiânia)  [GO]", "Cliente": "Aviva", "Categoria": "TV", "Total de notícias": 4, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "SBT GOIÁS  [GO]", "Cliente": "Aviva", "Categoria": "TV", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "TV Bahia (Globo - Salvador/BA)  [BA]", "Cliente": "Aviva", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Band News Rio de Janeiro 90.3 FM  [RJ]", "Cliente": "Aviva", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Educadora 107.5 FM  [BA]", "Cliente": "Aviva", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Metrópole Salvador 101.3 FM  [BA]", "Cliente": "Aviva", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Itapoan 97.5 FM  [BA]", "Cliente": "Aviva", "Categoria": "Rádio", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}]}, {"Cliente": "LINX", "Total_Emissoras": 10, "Total_Noticias": 28, "Em_Transcricao": 0, "Em_Monitoramento": 10, "Possibilidade": 0, "Sem_Cobertura": 0, "TV": 2, "Radio": 8, "Categorias": ["TV", "Rádio"], "Emissoras": [{"Emissora": "Times Brasil CNBC  [SP]", "Cliente": "LINX", "Categoria": "TV", "Total de notícias": 9, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil  [SP]", "Cliente": "LINX", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "CNN Brasil Money  [SP]", "Cliente": "LINX", "Categoria": "TV", "Total de notícias": 4, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan News TV  [SP]", "Cliente": "LINX", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan News TV  [SP]", "Cliente": "LINX", "Categoria": "TV", "Total de notícias": 2, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan (100.9 FM - São Paulo)  [SP]", "Cliente": "LINX", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "BM&C News  [SP]", "Cliente": "LINX", "Categoria": "TV", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Jovem Pan (100.9 FM - São Paulo)  [SP]", "Cliente": "LINX", "Categoria": "Rádio", "Total de notícias": 3, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio 89 FM A Rádio Rock (89.1 FM - São Paulo)  [SP]", "Cliente": "LINX", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}, {"Emissora": "Rádio Som Maior 100.7 FM  [SC]", "Cliente": "LINX", "Categoria": "Rádio", "Total de notícias": 1, "Possibilidade": "Em monitoramento", "Em monitoramento": "Sim", "Cobertura Tunad": "Sim", "Status_Match": null, "Info_Match": null, "Status_Final": "Em monitoramento"}]}], "kpis": {"total_clientes": 10, "total_emissoras": 190, "total_noticias": 883, "em_transcricao": 4, "em_monitoramento": 182, "possibilidade": 1, "sem_cobertura": 3, "emissoras_infraestrutura": 62}, "emissoras_transcricao": [{"Emissora": "89 Rádio Rock  FM 89.1", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Alpha FM 101.7", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Band - Belo Horizonte | Minas TV", "Cidade": "Belo Horizonte - MG / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Band - Porto Alegre TV", "Cidade": "Porto Alegre - RS / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Band - Rio de Janeiro TV", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Band - São Paulo TV", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-Basic"}, {"Emissora": "Band News | São Paulo TV", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Band News FM 89.5", "Cidade": "Belo Horizonte - MG / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Band News FM 90.3", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Band News FM 90.5", "Cidade": "Brasília - DF / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Band News FM 96.9", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Band News FM 99.3", "Cidade": "Porto Alegre - RS / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Bandeirantes FM 90.9", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "CBN FM 106.1", "Cidade": "Belo Horizonte - MG / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "CBN FM 90.5", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "CBN FM 92.5", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "CBN FM 95.3", "Cidade": "Brasília - DF / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "CNBC TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "CNN Brasil TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Cultura TV", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Disney FM 91.3", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "ESPN | Nacional TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Futura - Nacional TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Gaúcha FM 93.7", "Cidade": "Porto Alegre - RS / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Gazeta FM 88.1", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Gazeta TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Globo - Belo Horizonte | Minas TV", "Cidade": "Belo Horizonte - MG / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Globo - Brasília  TV", "Cidade": "Brasília - DF / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Globo - Porto Alegre | RBS TV", "Cidade": "Porto Alegre - RS / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Globo - Rio de Janeiro TV", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Globo - São Paulo TV", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-Basic"}, {"Emissora": "Globo FM 98.1", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Globo News | São Paulo TV", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Itatiaia FM 95.7", "Cidade": "Belo Horizonte - MG / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "JB FM 99.9", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Jovem Pan AM 620", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Jovem Pan FM 100.9", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Jovem Pan News | Nacional TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Kiss FM 92.5", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Metropolitana FM 98.5", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Mix FM 102.1", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Mix FM 106.3", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Nativa FM 95.3", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "O Dia FM 100.5", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Record - Belo Horizonte | Minas TV", "Cidade": "Belo Horizonte - MG / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Record - Porto Alegre TV", "Cidade": "Porto Alegre - RS / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Record - Rio de Janeiro TV", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Record - São Paulo TV", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-Basic"}, {"Emissora": "Record News | Nacional TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Rede CNT TV", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "RedeTV - Rio de Janeiro TV", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "RedeTV - São Paulo TV", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "SBT - Belo Horizonte | Alterosa TV", "Cidade": "Belo Horizonte - MG / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "SBT - Porto Alegre TV", "Cidade": "Porto Alegre - RS / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "SBT - Rio de Janeiro TV", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "SBT - São Paulo TV", "Cidade": "São Paulo - SP / BR", "Tipo": "Newsgen-Basic"}, {"Emissora": "SBT News TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Super Tupi  FM 96.5", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "TMC (Transamérica) POP FM 101.3", "Cidade": "Rio de Janeiro - RJ / BR", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "TV Brasil TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "TV Justiça TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}, {"Emissora": "Uol | Nacional TV", "Cidade": "Nacional", "Tipo": "Newsgen-OnDemand"}]};
+        let filtered = [...data.clientes];
+
+        function init() {
+            populateFilters();
+            render();
+            document.getElementById('search').oninput = apply;
+            document.getElementById('filter-cat').onchange = apply;
+            document.getElementById('filter-status').onchange = apply;
+        }
+
+        function populateFilters() {
+            const cats = new Set();
+            data.clientes.forEach(c => c.Categorias.forEach(cat => cats.add(cat)));
+            const sel = document.getElementById('filter-cat');
+            Array.from(cats).sort().forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                sel.appendChild(opt);
+            });
+        }
+
+        function render() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = filtered.map((c, i) => {
+                const statusMap = {
+                    'NewsGen': 'green',
+                    'Em monitoramento': 'blue',
+                    'Possibilidade': 'orange',
+                    'Sem cobertura': 'gray'
+                };
+                
+                return `
+                    <div class="cliente-card">
+                        <div class="cliente-header" onclick="toggle(${i})">
+                            <div class="cliente-nome">🏢 ${c.Cliente}</div>
+                            <div class="cliente-meta">
+                                <span>📡 ${c.Total_Emissoras} emissoras</span>
+                                <span>📰 ${c.Total_Noticias} notícias</span>
+                            </div>
+                            <div class="badge-row">
+                                <span class="media-badge">📺 TV: ${c.TV}</span>
+                                <span class="media-badge">📻 Rádio: ${c.Radio}</span>
+                            </div>
+                        </div>
+                        <div class="cliente-body">
+                            <div class="status-grid">
+                                <div class="status-box green">
+                                    <div class="status-value" style="color: var(--green)">${c.Em_Transcricao}</div>
+                                    <div class="status-label">NewsGen</div>
+                                </div>
+                                <div class="status-box blue">
+                                    <div class="status-value" style="color: var(--blue)">${c.Em_Monitoramento}</div>
+                                    <div class="status-label">Monitor.</div>
+                                </div>
+                                <div class="status-box orange">
+                                    <div class="status-value" style="color: var(--orange)">${c.Possibilidade}</div>
+                                    <div class="status-label">Possib.</div>
+                                </div>
+                                <div class="status-box gray">
+                                    <div class="status-value" style="color: var(--gray)">${c.Sem_Cobertura}</div>
+                                    <div class="status-label">Sem Cob.</div>
+                                </div>
+                            </div>
+                            <div class="categorias">
+                                ${c.Categorias.map(cat => `<span class="cat-tag">📂 ${cat}</span>`).join('')}
+                            </div>
+                            <button class="btn-toggle" onclick="toggle(${i})">Ver Detalhes ▼</button>
+                            <div class="emissoras-details" id="det-${i}">
+                                ${c.Emissoras.map(e => {
+                                    const cls = statusMap[e.Status_Final] || 'gray';
+                                    const icon = {'NewsGen':'✅','Em monitoramento':'👁️','Possibilidade':'🎯'}[e.Status_Final] || '⚪';
+                                    return `
+                                        <div class="emissora-item ${cls}">
+                                            <div class="emissora-nome">${e.Emissora}</div>
+                                            <div class="emissora-info">
+                                                <span class="status-badge ${cls}">${icon} ${e.Status_Final}</span>
+                                                ${e.Categoria ? `<span>📂 ${e.Categoria}</span>` : ''}
+                                                ${e['Total de notícias'] ? `<span>📰 ${e['Total de notícias']}</span>` : ''}
+                                                ${e['Cobertura Tunad'] ? `<span>📊 ${e['Cobertura Tunad']}</span>` : ''}
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            updateKPIs();
+        }
+
+        function toggle(i) {
+            document.getElementById(`det-${i}`).classList.toggle('show');
+        }
+
+        function apply() {
+            const search = document.getElementById('search').value.toLowerCase();
+            const cat = document.getElementById('filter-cat').value;
+            const status = document.getElementById('filter-status').value;
+
+            filtered = data.clientes.filter(c => {
+                const matchSearch = c.Cliente.toLowerCase().includes(search);
+                const matchCat = !cat || c.Categorias.includes(cat);
+                const matchStatus = !status || c.Emissoras.some(e => e.Status_Final === status);
+                return matchSearch && matchCat && matchStatus;
+            });
+
+            render();
+        }
+
+        function reset() {
+            document.getElementById('search').value = '';
+            document.getElementById('filter-cat').value = '';
+            document.getElementById('filter-status').value = '';
+            filtered = [...data.clientes];
+            render();
+        }
+
+        function updateKPIs() {
+            let trans = 0, mon = 0, poss = 0, not = 0;
+            filtered.forEach(c => {
+                trans += c.Em_Transcricao;
+                mon += c.Em_Monitoramento;
+                poss += c.Possibilidade;
+                not += c.Total_Noticias;
+            });
+            document.getElementById('kpi-clientes').textContent = filtered.length;
+            document.getElementById('kpi-transcricao').textContent = trans;
+            document.getElementById('kpi-monitoramento').textContent = mon;
+            document.getElementById('kpi-possibilidade').textContent = poss;
+            document.getElementById('kpi-noticias').textContent = not;
+        }
+
+        init();
+    </script>
+</body>
+</html>
